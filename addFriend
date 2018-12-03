@@ -1,0 +1,48 @@
+#!/bin/bash
+readingAndValidation(){
+read -p 'Name: ' fname
+#name validation
+while  [[ $fname = "" ]]
+do
+echo plz enter your name 
+read -p 'Name: ' fname
+done
+read -p 'Email: ' femail
+#email validation
+epattern="\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b" 
+while ! [[ $femail =~ $epattern ]]
+do
+echo invalid email 
+read -p 'Email: ' femail
+done
+
+read -p 'Birthday (eg: Nov 24): ' fBD
+#birthday validation
+BDpattern="(Jan|Feb|Mar|Apr|May|June|July|Aug|Sept|Oct|Nov|Dec)\ ([1-9]|[21][0-9]|3[01])"
+while ! [[ $fBD =~ $BDpattern ]]
+do
+echo invalid date 
+read -p 'Birthday (eg: Nov 24): ' fBD
+done
+findEmail=$(egrep $femail data.xml)
+
+if [ $findEmail  ]
+then
+echo this friend already exsist!
+else
+addFrind
+fi
+
+}
+addFrind(){
+sed -i "s/<\/friends>//g" data.xml
+sed -i "s/<\/info>//g" data.xml
+echo "<item>" >> data.xml
+echo "<name>$fname</name>" >> data.xml
+echo "<email>$femail</email>" >> data.xml
+echo "<birthday>$fBD</birthday>" >> data.xml
+echo "</item>" >> data.xml
+echo "</friends>" >> data.xml
+echo "</info>" >> data.xml
+}
+readingAndValidation

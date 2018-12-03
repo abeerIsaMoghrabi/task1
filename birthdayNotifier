@@ -1,0 +1,39 @@
+#!/bin/bash
+start () {
+if [ -e ./data.xml ]
+then 
+PS3='Pleas enter the number of option you want: '
+select option in "View friend list" "Add new friend" "Update a friend info" "Delete a friend from the list" "Exit"
+do
+case $option in
+		"View friend list") 
+		./DisplayFriendList 0
+		
+		;;
+		"Add new friend") 
+		./addFriend
+		
+		;;
+		"Update a friend info") 
+		./updateFriend
+		;;
+		"Delete a friend from the list") 
+		./deleteFriend
+		;;
+		"Exit") 
+		break
+		;;
+		esac
+		
+done
+else
+touch data.xml
+read -p 'Name: ' name
+read -p 'Email: ' email
+read -p 'Birthday: ' BD
+echo "<name>$name</name>" >> data.xml
+echo "<email>$email</email>" >> data.xml
+echo "<birthday>$BD</birthday>" >> data.xml
+fi
+}
+start

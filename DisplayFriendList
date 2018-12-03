@@ -1,0 +1,9 @@
+#!/bin/bash
+#xmllint --xpath 'string(//frinds)' data.xml
+#xmllint --xpath '/info/friends/item/name/text()' data.xml | sed s/'#'/'\n'/g |sort | nl -s '- '
+if [ $1 -eq 0 ]
+then
+xmllint --shell data.xml <<< `echo 'cat /info/friends/item/name/text()'`| sed s/'\/ >'/''/g |sed s/'-------'/''/g|grep -v -e '^[[:space:]]*$'|sort| nl -s '- '
+else
+xmllint --shell data.xml <<< `echo 'cat /info/friends/item/name/text()'`| sed s/'\/ >'/''/g |sed s/'-------'/''/g|grep -v -e '^[[:space:]]*$'|sort
+fi

@@ -1,0 +1,19 @@
+#!/bin/bash
+list=$(./DisplayFriendList 1)
+
+PS3='Pleas enter the number of friend you want: '
+select option in $list
+do
+
+egrep -A 3 $option data.xml|sed 's/<\/.*>//g'|sed 's/<.*>//g'
+echo Are you sure you want to delete this frind? enter yes or no 
+read choice
+
+if [ $choice = "yes" ]
+then
+lineNum=$(grep -n $option data.xml|sed 's/:<.*>//g')
+ let line=$lineNum-1
+sed -i "$line,+4d" data.xml
+fi
+break	
+done

@@ -1,0 +1,49 @@
+#!/bin/bash
+list=$(./DisplayFriendList 1)
+PS3='Pleas enter the number of friend you want: '
+select option in $list
+do
+
+echo Name: $(egrep -A 3 $option data.xml|sed 's/<\/.*>//g'|sed 's/<.*>//g'|head -1)
+echo Are you sure you want to update friend name? enter yes or no 
+read  choice
+
+if [ $choice = "yes" ]
+then
+read -p 'New Name: ' newName
+sed -i "s/$option/$newName/" data.xml
+option=$newName
+fi
+
+email=$(egrep -A 3 $option data.xml|sed 's/<\/.*>//g'|sed 's/<.*>//g'|head -2|tail -1)
+echo Email: $email
+echo Are you sure you want to update friend email? enter yes or no 
+read  choice
+
+if [ $choice = "yes" ]
+then
+read -p 'New email: ' newEmail
+sed -i "s/$email/$newEmail/" data.xml
+email=$newEmail
+fi
+	
+	
+BD=$(egrep -A 3 $option data.xml|sed 's/<\/.*>//g'|sed 's/<.*>//g'|head -3|tail -1)
+echo birthday: $BD
+echo Are you sure you want to update friend birhtday? enter yes or no 
+read  choice
+
+if [ $choice = "yes" ]
+then
+read -p 'New birhtday: ' newBD
+echo $email
+lineNum=$(grep -n $email data.xml|sed 's/:<.*>//g')
+#استخدمت الايميل لانو الاسم ممكن يكون جزء من الايميل بس الايميل مش ممكن يكون جزء من الاسم 
+let lineToDelete=$lineNum+1
+echo  $lineToDelete
+sed -i "$lineToDelete,+0d" data.xml
+sed -i "$lineToDelete i <birthday>$newBD</birthday>" data.xml
+
+fi
+break
+done
